@@ -1,0 +1,81 @@
+# Facial Recognition-Based Attendance System  
+
+## 👥 Team Members & Roles  
+
+This project is a collaborative effort by a team of five. Below are the roles and responsibilities assigned to each team member to ensure efficient development and execution.  
+
+---
+
+## 🎯 Roles & Responsibilities  
+
+### **1️⃣ Project Manager & System Architect (Team Lead)**  
+**Responsibilities:**  
+- Define the project scope, goals, and timeline.  
+- Oversee team coordination and ensure tasks are completed on time.  
+- Design the system architecture and ensure all components integrate smoothly.  
+- Make critical technical decisions regarding frameworks, libraries, and tools.  
+- Conduct security and privacy risk assessments.  
+- Monitor overall project progress and resolve roadblocks.  
+
+**Key Deliverables:**  
+- System architecture diagram  
+- Project roadmap and task allocation  
+- Regular progress reports  
+
+---
+
+### **2️⃣ Frontend Developer (UI/UX Specialist)**  
+**Responsibilities:**  
+- Develop the **Lecturer Dashboard** and **Student Portal** using React.js.  
+- Implement Material UI (MUI) components for a clean and user-friendly interface.  
+- Ensure responsiveness and accessibility for different screen sizes.  
+- Integrate frontend components with the backend API.  
+- Work closely with the backend developer for seamless data exchange.  
+
+**Key Deliverables:**  
+- Responsive UI for the dashboard and attendance tracking  
+- API integration with backend services  
+- UI testing and bug fixes  
+
+---
+
+### **3️⃣ Backend Developer (API & Database Management)**  
+**Responsibilities:**  
+- Develop the backend server using **Node.js & Express.js**.  
+- Design and implement **MongoDB** database schema.  
+- Create RESTful APIs for user authentication, attendance sessions, and reporting.  
+- Implement **OAuth & JWT authentication** for secure access.  
+- Optimize database queries and ensure backend efficiency.  
+
+**Key Deliverables:**  
+- API endpoints documentation (Swagger/Postman)  
+- Secure authentication and session management  
+- Integration with facial recognition module  
+
+---
+
+### **4️⃣ AI/ML Engineer (Facial Recognition & Image Processing)**  
+**Responsibilities:**  
+- Develop the **Facial Recognition Module** using **OpenCV & TensorFlow/Keras**.  
+- Train and fine-tune the model for accurate facial recognition.  
+- Implement face detection, recognition, and anti-spoofing techniques.  
+- Optimize AI model performance and handle dataset management.  
+- Integrate the facial recognition system with backend attendance processing.  
+
+**Key Deliverables:**  
+- Trained AI model for facial recognition  
+- Image preprocessing and model optimization scripts  
+- Documentation on how to retrain the model with new student data  
+
+---
+
+### **5️⃣ DevOps & Security Engineer (Deployment & Maintenance)**  
+**Responsibilities:**  
+- Set up and configure **servers** for hosting the system.  
+- Deploy the application using **Docker & Nginx** for scalability.  
+- Implement **CI/CD pipelines** for automated testing and deployment.  
+- Monitor system performance and handle security concerns (data encryption, GDPR compliance).  
+- Ensure proper logging, error handling, and backups.  
+
+**Key Deliverables:**  
+- Deployed application
