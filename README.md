@@ -1,5 +1,5 @@
 # Facial-Recognition-Attendance-System
-Fundamentals of suftware Project
+Fundamentals of software Project
 # Facial Recognition-Based Attendance System
 
 ## 📌 Overview
