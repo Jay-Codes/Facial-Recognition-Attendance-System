@@ -94,9 +94,37 @@ The system consists of the following components:
 
 5️⃣ **Reporting & Integration Module**  
    - Generate attendance reports.  
-   - Export data and integrate with school systems.  
+   - Export data and integrate with school systems.
 
----
+ 📈 Data Flow Diagram (DFD)  
+Below is the Data Flow Diagram (DFD) representing the system's data movement:
+![image](https://github.com/user-attachments/assets/c086d662-4e71-4c21-835d-bcf3e0ba75fc)
+
+Facial Recognition-Based Attendance System data flow diagram.
+Data Flow Explanation.
+ 1. Student → Camera (Face Capture)
+•	The student enters the classroom.
+•	The camera captures the student's face.
+ 2. Camera → Facial Recognition (Verify & Match)
+•	The facial recognition module checks if the captured face exists in the system.
+ 3. Facial Recognition → Attendance Processing (Mark Attendance)
+•	If a match is found, the student is marked Present.
+•	If no match, the student remains Absent (X).
+ 4. Attendance Processing → Database (Store Record)
+•	The attendance record is saved in the database.
+ 5. Database → Lecturer (View Attendance)
+•	The lecturer retrieves attendance records for monitoring.
+ 6. Lecturer → Attendance Report (Generate Reports)
+•	The lecturer generates attendance reports.
+ 7. Attendance Report → School System (Sync Data)
+•	The school system receives attendance data for official records.
+8. Admin → Database (Manage System)
+•	The admin manages users and updates attendance records.
+9. Admin → Facial Recognition (Update AI Model)
+•	The admin improves facial recognition accuracy by updating student images.
+
+ 
+
 
 ## 📈 Future Enhancements  
 🚀 Mobile App for attendance tracking.  
