@@ -79,3 +79,11 @@ This project is a collaborative effort by a team of five. Below are the roles an
 
 **Key Deliverables:**  
 - Deployed application
+- CI/CD pipeline configuration for automated testing and deployment
+- Security configuration documentation and compliance reports
+- System monitoring dashboard and alert setup
+- Backup and disaster recovery procedures
+- Infrastructure-as-code (IaC) templates for environment replication
+
+
+
