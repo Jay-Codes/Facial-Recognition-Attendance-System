@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Portal</title>
+    <style>
+        :root {
+            --primary-color: #3f51b5;
+            --secondary-color: #f50057;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --bg-light: #f5f5f5;
+            --bg-card: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tab-nav {
+            display: flex;
+            background-color: var(--bg-card);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .tab-content {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+            box-shadow: var(--shadow);
+            min-height: 400px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .attendance-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .present {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success-color);
+        }
+
+        .absent {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--danger-color);
+        }
+
+        .late {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--warning-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #303f9f;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #c51162;
+        }
+
+        .attendance-chart {
+            height: 300px;
+            margin-top: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-value {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--warning-color);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .attendance-session-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .attendance-session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .session-title {
+            font-weight: 500;
+        }
+
+        .session-status {
+            font-size: 0.85rem;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .camera-feed {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .verification-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.active .step-icon {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .step.completed .step-icon {
+            background-color: var(--success-color);
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+
+            .verification-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step:not(:last-child):after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex-basis: 50%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>Student Attendance Portal</h1>
+        <div class="sub-header">
+            <div class="user-info">
+                <div class="profile-pic">JS</div>
+                <div>
+                    <div>John Smith</div>
+                    <div style="font-size: 0.8rem;">Student ID: S12345</div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" onclick="showTab('attendance')">Attendance Records</button>
+            <button class="tab-btn" onclick="showTab('mark-attendance')">Mark Attendance</button>
+            <button class="tab-btn" onclick="showTab('profile')">Profile</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-panel active" id="dashboard-panel">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Overall Attendance</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Courses Enrolled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Attendance Warnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Classes Today</div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>Warning:</strong> Your attendance for COMP3456 has fallen below 75%. This may affect your eligibility for the final exam.
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Upcoming Classes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Time</th>
+                                <th>Room</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>COMP3456 - Advanced Programming</td>
+                                <td>10:30 AM - 12:30 PM</td>
+                                <td>Lab 4B</td>
+                                <td><button class="btn">Check In</button></td>
+                            </tr>
+                            <tr>
+                                <td>MATH2024 - Linear Algebra</td>
+                                <td>2:00 PM - 4:00 PM</td>
+                                <td>Lecture Hall 2</td>
+                                <td><button class="btn" disabled>Not Active</button></td>
+                            </tr>
+                            <tr>
+                                <td>PHYS1001 - Physics I</td>
+                                <td>4:30 PM - 6:30 PM</td>
+                                <td>Room 301</td>
+                                <td><button class="btn" disabled>Not Active</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance Records Tab -->
+            <div class="tab-panel" id="attendance-panel">
+                <div class="card">
+                    <div class="card-title">Attendance Summary</div>
+                    <div class="attendance-chart">
+                        <img src="/api/placeholder/800/300" alt="Attendance Chart Placeholder">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Attendance by Course</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Attendance</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>COMP3456 - Advanced Programming</td>
+                                <td>
+                                    <div>72% (18/25)</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-value" style="width: 72%"></div>
+                                    </div>
+                                </td>
+                                <td><span class="attendance-status warning">Warning</span></td>
+                                <td><button class="btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>MATH2024 - Linear Algebra</td>
+                                <td>
+                                    <div>92% (23/25)</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-value" style="width: 92%"></div>
+                                    </div>
+                                </td>
+                                <td><span class="attendance-status present">Excellent</span></td>
+                                <td><button class="btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>PHYS1001 - Physics I</td>
+                                <td>
+                                    <div>88% (22/25)</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-value" style="width: 88%"></div>
+                                    </div>
+                                </td>
+                                <td><span class="attendance-status present">Good</span></td>
+                                <td><button class="btn">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Recent Attendance Records</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Check-in Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>March 24, 2025</td>
+                                <td>MATH2024 - Linear Algebra</td>
+                                <td><span class="attendance-status present">Present</span></td>
+                                <td>2:05 PM</td>
+                            </tr>
+                            <tr>
+                                <td>March 24, 2025</td>
+                                <td>COMP3456 - Advanced Programming</td>
+                                <td><span class="attendance-status late">Late</span></td>
+                                <td>10:45 AM</td>
+                            </tr>
+                            <tr>
+                                <td>March 23, 2025</td>
+                                <td>PHYS1001 - Physics I</td>
+                                <td><span class="attendance-status present">Present</span></td>
+                                <td>4:25 PM</td>
+                            </tr>
+                            <tr>
+                                <td>March 23, 2025</td>
+                                <td>COMP3456 - Advanced Programming</td>
+                                <td><span class="attendance-status absent">Absent</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>March 22, 2025</td>
+                                <td>MATH2024 - Linear Algebra</td>
+                                <td><span class="attendance-status present">Present</span></td>
+                                <td>2:01 PM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mark Attendance Tab -->
+            <div class="tab-panel" id="mark-attendance-panel">
+                <div class="card">
+                    <div class="card-title">Active Attendance Sessions</div>
+                    <div class="attendance-session-card">
+                        <div class="session-header">
+                            <div class="session-title">COMP3456 - Advanced Programming</div>
+                            <div class="session-status"><span class="status-badge present">Active</span></div>
+                        </div>
+                        <div class="session-meta">
+                            <div>10:30 AM - 12:30 PM</div>
+                            <div>Lab 4B</div>
+                            <div>Prof. Johnson</div>
+                        </div>
+                        <button class="btn" onclick="initiateAttendance('COMP3456')">Mark Attendance</button>
+                    </div>
+                </div>
+
+                <div id="attendance-verification" style="display: none;">
+                    <div class="card">
+                        <div class="card-title">Facial Recognition Verification</div>
+                        
+                        <div class="verification-steps">
+                            <div class="step active">
+                                <div class="step-icon">1</div>
+                                <div>Camera Access</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">2</div>
+                                <div>Face Detection</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">3</div>
+                                <div>Verification</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">4</div>
+                                <div>Confirmation</div>
+                            </div>
+                        </div>
+                        
+                        <div class="camera-feed">
+                            <div>Camera feed will appear here</div>
+                        </div>
+                        
+                        <div id="verification-status">Please position your face in the center of the frame</div>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="cancelAttendance()">Cancel</button>
+                            <button class="btn" onclick="startVerification()">Start Verification</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div class="tab-panel" id="profile-panel">
+                <div class="card">
+                    <div class="card-title">Student Profile</div>
+                    <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+                        <div style="flex: 0 0 150px;">
+                            <div style="width: 150px; height: 150px; background-color: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--primary-color);">
+                                JS
+                            </div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Update Photo</button>
+                        </div>
+                        <div style="flex: 1;">
+                            <table style="box-shadow: none;">
+                                <tr>
+                                    <td style="font-weight: 500; width: 150px;">Name:</td>
+                                    <td>John Smith</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">Student ID:</td>
+                                    <td>S12345</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">Email:</td>
+                                    <td>john.smith@university.edu</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">Program:</td>
+                                    <td>Bachelor of Computer Science</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">Year:</td>
+                                    <td>3rd Year</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-title">Facial Recognition Settings</div>
+                    <p>Your facial data is used only for attendance verification and is stored securely.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Reset Facial Data</button>
+                        <button class="btn">Update Facial Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tab panels
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            tabPanels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Activate the selected tab button
+            const selectedButton = document.querySelector(`.tab-btn[onclick="showTab('${tabName}')"]`);
+            selectedButton.classList.add('active');
+            
+            // Show the selected tab panel
+            document.getElementById(`${tabName}-panel`).classList.add('active');
+        }
+        
+        // Mark attendance functions
+        function initiateAttendance(courseCode) {
+            document.querySelector('.card').style.display = 'none';
+            document.getElementById('attendance-verification').style.display = 'block';
+        }
+        
+        function cancelAttendance() {
+            document.querySelector('.card').style.display = 'block';
+            document.getElementById('attendance-verification').style.display = 'none';
+        }
+        
+        function startVerification() {
+            // This would integrate with the facial recognition system
+            const steps = document.querySelectorAll('.step');
+            
+            // Simulate the verification process with timeouts
+            steps[0].classList.add('completed');
+            steps[1].classList.add('active');
+            
+            setTimeout(() => {
+                steps[1].classList.add('completed');
+                steps[2].classList.add('active');
+                document.getElementById('verification-status').textContent = 'Verifying your identity...';
+                
+                setTimeout(() => {
+                    steps[2].classList.add('completed');
+                    steps[3].classList.add('active');
+                    document.getElementById('verification-status').textContent = 'Verification successful! Attendance marked.';
+                    
+                    setTimeout(() => {
+                        // Return to the active sessions
+                        cancelAttendance();
+                        // Update the UI to show the attendance has been marked
+                        const attendanceBtn = document.querySelector('.attendance-session-card button');
+                        attendanceBtn.textContent = 'Attendance Marked';
+                        attendanceBtn.disabled = true;
+                        attendanceBtn.classList.add('btn-secondary');
+                    }, 2000);
+                }, 2000);
+            }, 2000);
+        }
+        
+        function logout() {
+            // Handle logout functionality
+            alert('Logout functionality would be implemented here');
+        }
+    </script>
+</body>
+
+</html>
